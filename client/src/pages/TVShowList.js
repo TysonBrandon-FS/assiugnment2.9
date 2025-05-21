@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import '../styles/style.css';
 
+const API_URL = process.env.REACT_APP_API_URL;
+
 const TVShowList = () => {
   const [tvShows, setTVShows] = useState([]);
   const navigate = useNavigate();
@@ -10,7 +12,7 @@ const TVShowList = () => {
   useEffect(() => {
     const fetchTVShows = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/tvshows');
+        const response = await axios.get(`${API_URL}/api/tvshows`);
         setTVShows(response.data);
       } catch (error) {
         console.error('Error fetching TV shows:', error);
@@ -22,7 +24,7 @@ const TVShowList = () => {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost:5000/api/tvshows/${id}`);
+      await axios.delete(`${API_URL}/api/tvshows/${id}`);
       setTVShows(tvShows.filter(show => show._id !== id));
     } catch (error) {
       console.error('Error deleting TV show:', error);

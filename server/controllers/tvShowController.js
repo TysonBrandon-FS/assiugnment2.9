@@ -1,17 +1,17 @@
 const TVShow = require('../models/TVShow');
 
 
-exports.getAllTVShows = async (req, res) => {
+async function getAllTVShows(req, res) {
     try {
         const tvShows = await TVShow.find().sort({ createdAt: -1 });
         res.json(tvShows);
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
-};
+}
 
 
-exports.getTVShow = async (req, res) => {
+async function getTVShow(req, res) {
     try {
         const tvShow = await TVShow.findById(req.params.id);
         if (!tvShow) {
@@ -21,10 +21,10 @@ exports.getTVShow = async (req, res) => {
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
-};
+}
 
 
-exports.createTVShow = async (req, res) => {
+async function createTVShow(req, res) {
     const tvShow = new TVShow({
         title: req.body.title,
         genre: req.body.genre,
@@ -37,10 +37,10 @@ exports.createTVShow = async (req, res) => {
     } catch (error) {
         res.status(400).json({ message: error.message });
     }
-};
+}
 
 
-exports.updateTVShow = async (req, res) => {
+async function updateTVShow(req, res) {
     try {
         const tvShow = await TVShow.findById(req.params.id);
         if (!tvShow) {
@@ -56,10 +56,10 @@ exports.updateTVShow = async (req, res) => {
     } catch (error) {
         res.status(400).json({ message: error.message });
     }
-};
+}
 
 
-exports.deleteTVShow = async (req, res) => {
+async function deleteTVShow(req, res) {
     try {
         const tvShow = await TVShow.findById(req.params.id);
         if (!tvShow) {
@@ -71,4 +71,12 @@ exports.deleteTVShow = async (req, res) => {
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
+}
+
+module.exports = {
+    getAllTVShows,
+    getTVShow,
+    createTVShow,
+    updateTVShow,
+    deleteTVShow
 }; 

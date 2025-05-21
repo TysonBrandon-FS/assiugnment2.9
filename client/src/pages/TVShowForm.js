@@ -3,6 +3,8 @@ import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import '../styles/style.css';
 
+const API_URL = process.env.REACT_APP_API_URL;
+
 const TVShowForm = () => {
   const [formData, setFormData] = useState({
     title: '',
@@ -16,7 +18,7 @@ const TVShowForm = () => {
     if (id) {
       const fetchTVShow = async () => {
         try {
-          const response = await axios.get(`http://localhost:5000/api/tvshows/${id}`);
+          const response = await axios.get(`${API_URL}/api/tvshows/${id}`);
           setFormData(response.data);
         } catch (error) {
           console.error('Error fetching TV show:', error);
@@ -38,9 +40,9 @@ const TVShowForm = () => {
     e.preventDefault();
     try {
       if (id) {
-        await axios.put(`http://localhost:5000/api/tvshows/${id}`, formData);
+        await axios.put(`${API_URL}/api/tvshows/${id}`, formData);
       } else {
-        await axios.post('http://localhost:5000/api/tvshows', formData);
+        await axios.post(`${API_URL}/api/tvshows`, formData);
       }
       navigate('/tvshows');
     } catch (error) {
