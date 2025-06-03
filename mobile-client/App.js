@@ -8,8 +8,9 @@ const API_URL = 'https://assiugnment2-9.onrender.com/api/tvshows';
 export default function App() {
   const [tvShows, setTvShows] = useState([]);
   const [title, setTitle] = useState('');
+  const [genre, setGenre] = useState('');
+  const [rating, setRating] = useState('');
   const [editingId, setEditingId] = useState(null);
-
 
   const fetchShows = async () => {
     try {
@@ -24,22 +25,32 @@ export default function App() {
     fetchShows();
   }, []);
 
-
   const addShow = async () => {
     try {
-      await axios.post(API_URL, { title });
+      await axios.post(API_URL, { 
+        title,
+        genre,
+        rating: Number(rating)
+      });
       setTitle('');
+      setGenre('');
+      setRating('');
       fetchShows();
     } catch (error) {
       console.log('Error adding show:', error);
     }
   };
 
- 
   const updateShow = async (id) => {
     try {
-      await axios.put(`${API_URL}/${id}`, { title });
+      await axios.put(`${API_URL}/${id}`, { 
+        title,
+        genre,
+        rating: Number(rating)
+      });
       setTitle('');
+      setGenre('');
+      setRating('');
       setEditingId(null);
       fetchShows();
     } catch (error) {
@@ -61,12 +72,27 @@ export default function App() {
       <Text style={styles.title}>TV Shows</Text>
       
       <View style={styles.inputContainer}>
-        <TextInput
-          style={styles.input}
-          value={title}
-          onChangeText={setTitle}
-          placeholder="Enter TV show title"
-        />
+        <View style={styles.inputGroup}>
+          <TextInput
+            style={styles.input}
+            value={title}
+            onChangeText={setTitle}
+            placeholder="Enter TV show title"
+          />
+          <TextInput
+            style={styles.input}
+            value={genre}
+            onChangeText={setGenre}
+            placeholder="Enter genre"
+          />
+          <TextInput
+            style={styles.input}
+            value={rating}
+            onChangeText={setRating}
+            placeholder="Enter rating (1-10)"
+            keyboardType="numeric"
+          />
+        </View>
         <TouchableOpacity 
           style={styles.button}
           onPress={() => editingId ? updateShow(editingId) : addShow()}
@@ -80,13 +106,18 @@ export default function App() {
       <ScrollView style={styles.list}>
         {tvShows.map((show) => (
           <View key={show._id} style={styles.showItem}>
-            <Text style={styles.showText}>{show.title}</Text>
-            <Text style={styles.showText}>Rating: {show.rating}</Text>
+            <View style={styles.showInfo}>
+              <Text style={styles.showText}>Show: {show.title}</Text>
+              <Text style={styles.showText}>Genre: {show.genre}</Text>
+              <Text style={styles.showText}>Rating: {show.rating}</Text>
+            </View>
             <View style={styles.buttonContainer}>
               <TouchableOpacity 
                 style={[styles.button, styles.editButton]}
                 onPress={() => {
                   setTitle(show.title);
+                  setGenre(show.genre);
+                  setRating(show.rating.toString());
                   setEditingId(show._id);
                 }}
               >
@@ -120,15 +151,16 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   inputContainer: {
-    flexDirection: 'row',
     marginBottom: 20,
   },
+  inputGroup: {
+    marginBottom: 10,
+  },
   input: {
-    flex: 1,
     borderWidth: 1,
     borderColor: '#ddd',
     padding: 10,
-    marginRight: 10,
+    marginBottom: 10,
     borderRadius: 5,
   },
   button: {
@@ -145,19 +177,20 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   showItem: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
     padding: 10,
     borderBottomWidth: 1,
     borderBottomColor: '#ddd',
   },
+  showInfo: {
+    marginBottom: 10,
+  },
   showText: {
-    flex: 1,
     fontSize: 16,
+    marginBottom: 5,
   },
   buttonContainer: {
     flexDirection: 'row',
+    justifyContent: 'flex-end',
   },
   editButton: {
     backgroundColor: '#34C759',
