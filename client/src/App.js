@@ -4,6 +4,9 @@ import Navbar from './components/Navbar';
 import Home from './pages/Home';
 import TVShowList from './pages/TVShowList';
 import TVShowForm from './pages/TVShowForm';
+import Register from './pages/Register';
+import Login from './pages/Login';
+import ProtectedContent from './pages/ProtectedContent';
 import './styles/style.css';
 
 function App() {
@@ -16,6 +19,9 @@ function App() {
           <Route path="/tvshows" element={<TVShowList />} />
           <Route path="/tvshows/new" element={<TVShowForm />} />
           <Route path="/tvshows/edit/:id" element={<TVShowForm />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/protected" element={<ProtectedContent />} />
         </Routes>
       </div>
     </Router>
